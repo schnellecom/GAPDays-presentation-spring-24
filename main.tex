@@ -27,6 +27,7 @@ style=numeric,
 ]{biblatex}
 \addbibresource{references.bib}
 \usepackage[normalem]{ulem}
+\usepackage{verbatim}
 
 \declaretheoremstyle[
     headpunct=,
@@ -146,47 +147,21 @@ style=numeric,
 \begin{frame}
     \begin{exampleblock}{Fachpraktikum}
         Was a project with the goal to improve the visualizations by adding shading/local lighting
-        \pause
+        \pause \\
         After some work it turns out: central class used in implementation is deprecated.
         \includegraphics[width=1\textwidth]{images/three-deprecated.png}
+        \pause \\ 
+        Decided to rewrite whole functionality
     \end{exampleblock}
 \end{frame}
 
-\begin{frame}{Goal}
-    \begin{exampleblock}{Goal}
-        Implement shading in the visualizations of the Simplicial Surface package.
-    \end{exampleblock}
-    \pause
-    First Approach: Implement directly\\
-    $\xrightarrow{}$ Learn how the output is generated\\
-    Uses a class called \texttt{THREE.Geometry} \\
-    
-\end{frame}
-
-\begin{frame}{Workflow}
-    \textbf{But:} In newer revisions of three.js shading is already implemented.\\
-    $\xrightarrow{}$ After some promisiong tests: Decided to rewrite the entire function.
-\end{frame}
-
-\begin{frame}{Demo}
-    We need to switch to the browser for this.\\
-    For one example we use \cite{ico}
-    
-\end{frame}
-
-\begin{frame}{Results}
-    \begin{block}{ToDos}
-        \begin{itemize}[label=-]
-            \item Some of the functions are not yet implemented again
-        \end{itemize}
-    \end{block}
-\pause
+\begin{frame}
     \begin{exampleblock}{Advantages}
         \begin{itemize}[label=-]
             \item New security requirements of javascript and modern browsers: need to load the code from server $\xrightarrow{}$ way smaller file sizes\\
                 (for small examples 9kB vs. 539kB)
                 \pause
-            \item More efficient Animations, faster loading, fewer memory\\
+            \item More efficient Animations, faster loading, less memory\\
                 (Demo in Browser)
                 \pause
             \item Also works for triangular complexes\\
@@ -195,29 +170,49 @@ style=numeric,
         \end{itemize}
     \end{exampleblock}
 \end{frame}
+
+\section{GAPic}
 \begin{frame}
-    \begin{block}{Future}
-        \begin{itemize}[label=-]
-            \item More functions in the GUI, e.g. \\
-            \begin{itemize}[label=-]
-                \item Turning the vertices on and off
-                \item Changing location of a vertex on the fly
-            \end{itemize}
-            \item More options materials\\
-                e.g. Color dependent on the normal of the polygon\\
-                (Demo in browser)
-            \item Intersection planes \\
-                (Demo in browser)    
-        \end{itemize}
-    \end{block}
+    Afterwards decided to roll this feature into new package: \\
+    \begin{center}
+        GAP \textbf{i}mage \textbf{c}reator    
+    \end{center}
+    \pause
+    Goal is to divide up working with triangular complexes/simplicial surfaces in \texttt{SimplicialSurfaces} and to visualize them in \texttt{GAPic}.
 \end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{New features since creating \texttt{GAPic}}
+        \begin{itemize}[label=-]
+            \item Most settings available via GUI in real time \pause
+            \item \texttt{normalsMaterial} for visualizing angles of faces\\
+            $\xrightarrow{}$ maps colors of a face smoothly depending on the normal \pause
+            \item Intersection planes\\
+            $\xrightarrow{}$ allows seeing inside complexes \pause
+            \item Parameterized coordinates \\
+            $\xrightarrow{}$ allows coordinates to be defined as any equation JavaScript can evaluate
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Future}
+        \begin{itemize}[label=-]
+            \item Currently in beta\\
+            $\xrightarrow{}$ need to finish manual \pause
+            \item Make compatible with objects from other packages\\
+            $\xrightarrow{}$ e.g. \texttt{simpcomp} package \pause
+            \item Partial rewrite with new data structure\\
+            $\xrightarrow{}$ will reduce storage especially for bug animations
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
 
 \begin{frame}
     \textbf{\Large Thank You for your attention}\\
     \bigskip
-    Are there Questions?
-    \bigskip
-    
+    References:\\
     \printbibliography
 \end{frame}
 
