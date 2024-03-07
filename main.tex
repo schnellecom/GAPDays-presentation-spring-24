@@ -1,0 +1,225 @@
+\documentclass{beamer}
+\usepackage{graphicx} % Required for inserting images
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage{ellipsis}
+%\usepackage[ngerman]{babel}
+\let\openbox\undefined
+\usepackage{mathtools}
+\usepackage{enumitem}
+\let\openbox\undefined
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{graphicx}
+\usepackage{stmaryrd}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{algpseudocode}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{url}
+\usepackage[
+backend=biber,
+style=numeric,
+]{biblatex}
+\addbibresource{references.bib}
+\usepackage[normalem]{ulem}
+
+\declaretheoremstyle[
+    headpunct=,
+    spacebelow=2em,
+    spaceabove=1em,
+    postheadspace=\newline,
+    ]{aufgabe}
+\declaretheorem[style=aufgabe]{aufgabe}
+\numberwithin{equation}{aufgabe}
+\addtolength\jot{1ex}
+
+\newtheorem{proposition}{Proposition}
+\renewcommand\qedsymbol{$\square$}
+
+\newcommand\R{\mathbb R}
+\newcommand\Z{\mathbb Z}
+\newcommand\N{\mathbb N}
+\newcommand\C{\mathbb C}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\ass}{\underline{Assume:}  }
+\newcommand{\zz}{\underline{t.s.:}  }
+
+\usetheme[compress]{Berlin}
+\setbeamertemplate{footline}[frame number]{}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+
+\makeatletter
+\beamer@theme@subsectionfalse%
+\makeatother
+
+
+\title{The GAPic Package}
+\subtitle{}
+\author{Lukas Schnelle}
+\date{GAPDays Spring 2024}
+
+\begin{document}
+
+% remove dots on first slide
+\frame[plain]{\titlepage}
+
+\section{Definitions}
+\begin{frame}
+    \begin{definition}\label{def:triangular-comp}
+    	Let $X_0, X_1, X_2 \subset \N_0$ be finite subsets and \pause $\prec$ a symmetric relation between the sets called \emph{incidence}. \pause \\
+    	We call $(\prec, X_0, X_1, X_2)$ \emph{triangular complex} if
+    	\begin{enumerate}[label=(\roman*)] \pause 
+    		\item The relation $\prec$ is transitive, i.e. $\forall v \in X_0, e \in X_1, f \in X_2$:
+    		$$(v \prec e) \wedge (e \prec f) \Rightarrow v \prec f.$$
+    		\item \pause $\forall e \in X_1 \exists !\,  v_1 \neq v_2 \in X_0$ such that $v_1 \prec e, v_2 \prec e$.\pause 
+    		\item $\forall e \in X_1 \exists \, f \in X_2$ such that $e \prec f$. \pause 
+    		\item $\forall f \in X_2 \exists ! \, v_1 \neq v_2 \neq v_3 \in X_0$ such that $v_1, v_2, v_3 \prec f$. \pause 
+            \item $\forall f \in X_2 \exists ! \, e_1 \neq e_2 \neq e_3 \in X_1$ such that $e_1, e_2, e_3 \prec f$. \pause 
+    	\end{enumerate}
+    	The elements in $X_0$ are called \emph{vertices}, the elements in $X_1$ are called \emph{edges} and the elements in $X_2$ are called \emph{faces}.
+    \end{definition}
+\end{frame}
+
+\begin{frame}
+    \begin{definition}
+        Let $(\prec, X_0, X_1, X_2)$ be a triangular complex.\\
+        Then we call $(\prec, X_0, X_1, X_2)$ \emph{simplicial surface} if 
+        \begin{enumerate}[label=(\roman*)]
+            \item $\forall e \in X_1 : | \{ f \in X_2 \mid e \prec f \} | \leq 2 $
+            \item $\forall v \in X_0 : | \{ f \in X_2 \mid v \prec f \} | < \infty$
+            \item $\forall v \in X_0: $ there is an ordering of the $e_i, f_j \prec v$ such that 
+            $$
+                e_1 \prec f_1 \prec e_2 \prec f_2 \prec \dots \prec f_{n-1} \prec e_{n} \prec f_{n} \prec e_1
+            $$
+        \end{enumerate}
+        the last condition is called the \emph{umbrella condition}.
+    \end{definition}
+\end{frame}
+
+\begin{frame}
+    \begin{example}
+        \includegraphics[width=0.48\textwidth]{images/tet.png}
+        \uncover<3->{
+        \includegraphics[width=0.48\textwidth]{images/complex3.png}}\\
+        \uncover<2->{Simplicial Surface} \hspace{75pt} \uncover<4>{Triangular complex}
+    \end{example}
+\end{frame}
+
+\begin{frame}
+    \begin{definition}\label{def:embedding}
+        Let $(\prec, X_0, X_1, X_2)$ be a triangular complex. \\ \pause
+        Then we define an \emph{embedding} of $(\prec, X_0, X_1, X_2)$ as a map 
+        $$c: X_0 \to \R^3.$$ 
+        The image of $v \in X_0$ is called \emph{coordinate of $v$}.
+    \end{definition}
+    \pause
+    \begin{example}
+        \centering
+        \includegraphics[width=0.3\textwidth]{images/tet.png}\\
+        Is an embedded triangular complex.
+    \end{example}
+\end{frame}
+
+\section{SimplicialSurfaces Package}
+\begin{frame}{Simplicial Surfaces Package}
+    \begin{itemize}[label=-]
+        \item Has functionality for displaying surfaces
+        \begin{itemize}[label=-]
+            \item Generates a .html file
+            \item Uses three.js
+        \end{itemize}
+    \end{itemize}
+    \pause
+    \begin{example}[Number 2.1 and 2.2 from \cite{ico}]
+        \includegraphics[width=0.4\textwidth]{images/ico-old.png}
+        \includegraphics[width=0.4\textwidth]{images/ico2-1_old.png}
+    \end{example}
+\end{frame}
+
+% \begin{frame}
+%     % \begin{exampleblock}{Fachpraktikum}
+%     %     Was a project with the goal to improve the visualizations by adding shading/local lighting
+%     %     \pause
+%     %     After some work it turns out: central class used in implementation is deprecated.
+%     %     \includegraphics[width=1\textwidth]{images/three-deprecated.png}
+%     % \end{exampleblock}
+% \end{frame}
+
+\begin{frame}{Goal}
+    \begin{exampleblock}{Goal}
+        Implement shading in the visualizations of the Simplicial Surface package.
+    \end{exampleblock}
+    \pause
+    First Approach: Implement directly\\
+    $\xrightarrow{}$ Learn how the output is generated\\
+    Uses a class called \texttt{THREE.Geometry} \\
+    
+\end{frame}
+
+\begin{frame}{Workflow}
+    \textbf{But:} In newer revisions of three.js shading is already implemented.\\
+    $\xrightarrow{}$ After some promisiong tests: Decided to rewrite the entire function.
+\end{frame}
+
+\begin{frame}{Demo}
+    We need to switch to the browser for this.\\
+    For one example we use \cite{ico}
+    
+\end{frame}
+
+\begin{frame}{Results}
+    \begin{block}{ToDos}
+        \begin{itemize}[label=-]
+            \item Some of the functions are not yet implemented again
+        \end{itemize}
+    \end{block}
+\pause
+    \begin{exampleblock}{Advantages}
+        \begin{itemize}[label=-]
+            \item New security requirements of javascript and modern browsers: need to load the code from server $\xrightarrow{}$ way smaller file sizes\\
+                (for small examples 9kB vs. 539kB)
+                \pause
+            \item More efficient Animations, faster loading, fewer memory\\
+                (Demo in Browser)
+                \pause
+            \item Also works for triangular complexes\\
+            $\xrightarrow{}$Does not depend on incidence structure for visualization\\
+            (Demo in Browser)
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+\begin{frame}
+    \begin{block}{Future}
+        \begin{itemize}[label=-]
+            \item More functions in the GUI, e.g. \\
+            \begin{itemize}[label=-]
+                \item Turning the vertices on and off
+                \item Changing location of a vertex on the fly
+            \end{itemize}
+            \item More options materials\\
+                e.g. Color dependent on the normal of the polygon\\
+                (Demo in browser)
+            \item Intersection planes \\
+                (Demo in browser)    
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \textbf{\Large Thank You for your attention}\\
+    \bigskip
+    Are there Questions?
+    \bigskip
+    \nocite{*}
+    
+    \printbibliography
+\end{frame}
+
+\end{document}
