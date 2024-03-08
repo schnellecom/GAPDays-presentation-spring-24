@@ -75,17 +75,16 @@ style=numeric,
 \section{Definitions}
 \begin{frame}
     \begin{definition}\label{def:triangular-comp}
-    	Let $X_0, X_1, X_2 \subset \N_0$ be finite subsets and $\prec$ a symmetric relation between the sets called \emph{incidence}. \pause \\
+    	Let $X_0$ ("vertices"), $X_1$ ("edges") and $X_2$ ("faces") subsets of $\N_0$ and $\prec$ a symmetric relation between the sets called \emph{incidence}. \pause \\
     	We call $(\prec, X_0, X_1, X_2)$ \emph{triangular complex} if
     	\begin{enumerate}[label=(\roman*)] \pause 
-    		\item The relation $\prec$ is transitive, i.e. $\forall v \in X_0, e \in X_1, f \in X_2$:
+    		\item $\prec$ is transitive, i.e. $\forall v \in X_0, e \in X_1, f \in X_2$:
     		$$(v \prec e) \wedge (e \prec f) \Rightarrow v \prec f$$
-    		\item \pause $\forall e \in X_1 \exists !\,  v_1 \neq v_2 \in X_0$ such that $v_1, v_2 \prec e$\pause 
     		\item $\forall e \in X_1 \exists \, f \in X_2$ such that $e \prec f$ \pause 
+    		\item \pause $\forall e \in X_1 \exists !\,  v_1 \neq v_2 \in X_0$ such that $v_1, v_2 \prec e$ \pause 
     		\item $\forall f \in X_2 \exists ! \, v_1 \neq v_2 \neq v_3 \in X_0$ such that $v_1, v_2, v_3 \prec f$ \pause 
             \item $\forall f \in X_2 \exists ! \, e_1 \neq e_2 \neq e_3 \in X_1$ such that $e_1, e_2, e_3 \prec f$ \pause 
     	\end{enumerate}
-    	The elements in $X_0$ are called \emph{vertices}, the elements in $X_1$ are called \emph{edges} and the elements in $X_2$ are called \emph{faces}.
     \end{definition}
 \end{frame}
 
@@ -98,10 +97,11 @@ style=numeric,
             \item $\forall v \in X_0 : | \{ f \in X_2 \mid v \prec f \} | < \infty$ \pause
             \item $\forall v \in X_0: $ there is an ordering of the $e_i, f_j \prec v$ such that 
             $$
-                e_1 \prec f_1 \prec e_2 \prec f_2 \prec \dots \prec f_{n-1} \prec e_{n} \prec f_{n} \prec e_1
+                e_1 \prec f_1 \prec e_2 \prec f_2 \prec \dots \prec f_{n} \prec e_{n}
             $$ \pause
-        \end{enumerate}
-        the last condition is called the \emph{umbrella condition}.
+        \end{enumerate} \vspace{-17px}
+        with $e_1 = e_n$ if condition (i) is exactly $2$.\pause \\
+        Condition (iii) is called the \emph{umbrella condition}.
     \end{definition}
 \end{frame}
 
@@ -180,7 +180,7 @@ style=numeric,
                 (Demo in Browser)
                 \pause
             \item Also works for triangular complexes\\
-            $\xrightarrow{}$Does not depend on incidence structure for visualization\\
+            $\xrightarrow{}$Does not depend on umbrella condition for visualization\\
             (Demo in Browser)
         \end{itemize}
     \end{exampleblock}
