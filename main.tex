@@ -79,7 +79,7 @@ style=numeric,
     	We call $(\prec, X_0, X_1, X_2)$ \emph{triangular complex} if
     	\begin{enumerate}[label=(\roman*)] \pause 
     		\item $\prec$ is transitive, i.e. $\forall v \in X_0, e \in X_1, f \in X_2$:
-    		$$(v \prec e) \wedge (e \prec f) \Rightarrow v \prec f$$
+    		$$(v \prec e) \wedge (e \prec f) \Rightarrow v \prec f$$ \vspace{-15px} \pause
     		\item $\forall e \in X_1 \exists \, f \in X_2$ such that $e \prec f$ \pause 
     		\item \pause $\forall e \in X_1 \exists !\,  v_1 \neq v_2 \in X_0$ such that $v_1, v_2 \prec e$ \pause 
     		\item $\forall f \in X_2 \exists ! \, v_1 \neq v_2 \neq v_3 \in X_0$ such that $v_1, v_2, v_3 \prec f$ \pause 
@@ -93,14 +93,14 @@ style=numeric,
         Let $(\prec, X_0, X_1, X_2)$ be a triangular complex.\\
         Then we call $(\prec, X_0, X_1, X_2)$ \emph{simplicial surface} if \pause
         \begin{enumerate}[label=(\roman*)]
-            \item $\forall e \in X_1 : | \{ f \in X_2 \mid e \prec f \} | \leq 2 $ \pause
-            \item $\forall v \in X_0 : | \{ f \in X_2 \mid v \prec f \} | < \infty$ \pause
-            \item $\forall v \in X_0: $ there is an ordering of the $e_i, f_j \prec v$ such that 
+            \item $\forall e \in X_1 : | \{ f \in X_2 \mid e \prec f \} | \leq 2 $ 
+            \item $\forall v \in X_0 : def(v) \coloneqq | \{ f \in X_2 \mid v \prec f \} | < \infty$ 
+            \item $\forall v \in X_0: $ there is an ordering of $e_1, f_1, \dots, e_{deg(v)}, f_{deg(v)} \prec v$ such that 
             $$
-                e_1 \prec f_1 \prec e_2 \prec f_2 \prec \dots \prec f_{n} \prec e_{n}
-            $$ \pause
-        \end{enumerate} \vspace{-17px}
-        with $e_1 = e_n$ if condition (i) is exactly $2$.\pause \\
+                e_1 \prec f_1 \prec e_2 \prec f_2 \prec \dots \prec f_{deg(v)} \prec e_{deg(v)}
+            $$
+            with $e_1 = e_{deg}(v)$ if (i) is an equality.\pause
+        \end{enumerate} 
         Condition (iii) is called the \emph{umbrella condition}.
     \end{definition}
 \end{frame}
@@ -154,7 +154,9 @@ style=numeric,
     \end{itemize}
     \pause
     \begin{example}[Number 2.1 and 2.2 from \cite{ico}]
+        \centering
         \includegraphics[width=0.4\textwidth]{images/ico-old.png}
+        \hspace{10px}
         \includegraphics[width=0.4\textwidth]{images/ico2-1_old.png}
     \end{example}
 \end{frame}
@@ -176,12 +178,10 @@ style=numeric,
             \item New security requirements of JavaScript and modern browsers: need to load the code from some server $\xrightarrow{}$ way smaller file sizes\\
                 (for small examples 9kB vs. 539kB)
                 \pause
-            \item More efficient Animations, faster loading, less memory\\
-                (Demo in Browser)
+            \item More efficient Animations, faster loading, lower memory usage
                 \pause
             \item Also works for triangular complexes\\
             $\xrightarrow{}$Does not depend on umbrella condition for visualization\\
-            (Demo in Browser)
         \end{itemize}
     \end{exampleblock}
 \end{frame}
@@ -223,6 +223,21 @@ style=numeric,
             $\xrightarrow{}$ e.g. \texttt{simpcomp} package or \pause\textbf{your package?}
         \end{itemize}
     \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        \textbf{Time for Demonstrations}
+    \end{center}
+    \pause
+    \bigskip
+    \begin{itemize}[label=-]
+        \item Triangular complex
+        \item Improved performance
+        \item Normals material
+        \item Intersection planes
+        \item Parameterized coordinates
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
