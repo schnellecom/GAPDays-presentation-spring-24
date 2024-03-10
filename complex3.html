@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>complex3</title>
+		<style>
+			body { margin: 0; }
+		</style>
+
+
+	</head>
+	<body><script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three@0.148.0/examples/jsm/",
+				"gui": "https://unpkg.com/dat.gui@0.7.9/build/dat.gui.module.js"
+			}
+		}
+	</script>
+
+
+		<script type="module">
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import { GUI } from 'gui';
+			import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+			//start scene and camera
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100 );
+
+			const renderer = new THREE.WebGLRenderer({ antialias: true });
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			//Lights
+			const skyColor = 0xFFFFFF;
+			const skyIntensity = 0.3;
+			const skyLight = new THREE.AmbientLight(skyColor, skyIntensity);
+			scene.add(skyLight);
+
+			const color = 0xFFFFFF;
+			const intensity = 1;
+			const light = new THREE.PointLight(color, intensity);
+			light.position.set(0, 3, -5);
+			scene.add(light);
+
+			//create groups to add everything to
+            const meshRoot = new THREE.Group();
+            const wireRoot = new THREE.Group();
+            const sphereRoot = new THREE.Group();
+
+			//parameters for the controls on the top right
+            var guiParameters = new function() { 
+                this.speedX = 0.0; 
+                this.speedY = 0.0; 
+                this.speedZ = 0.0;
+                this.transparency = 1.0;
+                this.wireframe = false;
+            } ;
+
+            //generate a sphere geometry for the vertices
+            const sphere_geometry = new THREE.SphereGeometry( 0.02, 32, 16 );const geometry1 = new THREE.BufferGeometry();
+const vertices1 = new Float32Array( [
+ 0.,0.,0.5,
+0.,0.,-0.5,
+-0.5020754890501669,0.8648237989874213,0.,
+
+0.,0.,0.5,
+0.,0.,-0.5,
+-0.4958404065900716,-0.8684136636376656,0.,
+
+0.,0.,0.5,
+0.,0.,-0.5,
+0.9999741183092544,0.007194630750034754,0.,
+
+] ); 
+
+geometry1.setAttribute( 'position', new THREE.BufferAttribute( vertices1, 3 ) );
+
+
+            const material1 = new THREE.MeshPhongMaterial({
+                color: 0x049EF4,          
+                flatShading: true,       
+            });
+            material1.transparent = true;
+            material1.side = THREE.DoubleSide;
+        
+            const mesh1 = new THREE.Mesh( geometry1, material1 );
+            mesh1.castShadow = true;                         
+            mesh1.receiveShadow = true;                      
+                                        
+            meshRoot.add(mesh1);
+                                                                            
+            const wireMaterial = new THREE.MeshStandardMaterial( {         
+                color: 0x000000,
+                wireframeLinewidth: 3.,
+            } );
+            wireMaterial.wireframe = true 
+                                                                
+            const line1 = new THREE.Line( geometry1, wireMaterial );
+            wireRoot.add(line1);
+        //add lables for the vertices
+
+			camera.position.z = -2;
+            camera.position.x = 0;
+            camera.position.y = -2;
+            camera.lookAt(0,0,-1);
+
+            scene.background = new THREE.Color( 'white' );
+
+            //rederer for lables
+            const labelRenderer = new CSS2DRenderer();
+            labelRenderer.setSize( window.innerWidth, window.innerHeight );
+            labelRenderer.domElement.style.position = 'absolute';
+            labelRenderer.domElement.style.top = '0px';
+            document.body.appendChild( labelRenderer.domElement );
+            
+            //controls for mouse 
+            const controls = new OrbitControls( camera, labelRenderer.domElement );
+
+            //controls in the top right corner
+            var gui = new GUI();
+
+            const animationFolder = gui.addFolder("Animations");
+
+            animationFolder.add(guiParameters, 'speedX', 0, 5);
+            animationFolder.add(guiParameters, 'speedY', 0, 5);
+            animationFolder.add(guiParameters, 'speedZ', 0, 5);
+            animationFolder.open();
+
+            const controlFolder = gui.addFolder("Controls");
+            controlFolder.add(guiParameters, "transparency", 0, 1);
+            controlFolder.add(guiParameters, "wireframe");
+            controlFolder.open();
+
+            // add both roots to the scene
+            scene.add( meshRoot );
+            scene.add( wireRoot );
+            scene.add( sphereRoot );
+
+
+            function animate() {
+                requestAnimationFrame( animate );
+                meshRoot.rotation.x += guiParameters.speedX/100;
+                meshRoot.rotation.y += guiParameters.speedY/100;
+                meshRoot.rotation.z += guiParameters.speedZ/100;
+
+                wireRoot.rotation.x += guiParameters.speedX/100;
+                wireRoot.rotation.y += guiParameters.speedY/100;
+                wireRoot.rotation.z += guiParameters.speedZ/100;
+
+                sphereRoot.rotation.x += guiParameters.speedX/100;
+                sphereRoot.rotation.y += guiParameters.speedY/100;
+                sphereRoot.rotation.z += guiParameters.speedZ/100;
+
+                //update the light when the camera moves (with orbitcontrols)
+                light.position.set(camera.position.x, camera.position.y, camera.position.z);
+
+                //update stuff that changes from the gui
+                meshRoot.traverse( function( node ) {
+                    if ( node instanceof THREE.Mesh ) {
+                        node.material.opacity = guiParameters.transparency;
+                    }
+                } );
+
+                wireRoot.traverse( function( node ) {
+                    if ( node instanceof THREE.Line ) {
+                        node.material.visible = guiParameters.wireframe;
+                    }
+                } );
+
+                controls.update();
+
+                renderer.render( scene, camera );
+                labelRenderer.render( scene, camera );
+            }
+            animate();
+
+            //resize of window size changes
+            window.addEventListener( 'resize', onWindowResize );
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                labelRenderer.setSize( window.innerWidth, window.innerHeight );
+            }
+</script>	</body>
+</html>
